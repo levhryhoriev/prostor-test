@@ -18,6 +18,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
@@ -51,6 +52,7 @@ class SeedDemoDataCommand extends Command
         private readonly WriterInterface $configWriter,
         private readonly EncryptorInterface $encryptor,
         private readonly CacheManager $cacheManager,
+        private readonly IndexerRegistry $indexerRegistry,
         private readonly State $appState
     ) {
         parent::__construct();
@@ -85,6 +87,7 @@ class SeedDemoDataCommand extends Command
             '500.00',
             true
         );
+        $this->indexerRegistry->get('cataloginventory_stock')->reindexAll();
         $this->cacheManager->clean(['config', 'full_page', 'prostor_loyalty']);
 
         $output->writeln('<info>Prostor demo customer, products, stock, and configuration are ready.</info>');
