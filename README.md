@@ -14,7 +14,6 @@ The credentials are used only by Composer. They are not part of this repository.
 ## Start
 
 ```bash
-cp .env.example .env
 ./scripts/bootstrap-env.sh
 ./scripts/install-magento.sh
 ```
