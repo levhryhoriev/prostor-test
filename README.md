@@ -16,23 +16,23 @@ The credentials are used only by Composer. They are not part of this repository.
 ```bash
 ./scripts/bootstrap-env.sh
 ./scripts/install-magento.sh
+./scripts/seed-demo-data.sh
 ```
 
 Open `http://localhost:18090` after the installation completes.
 
-## Configuration
+## Demo data
 
-Open **Stores → Configuration → Prostor → Cumulative Discount**, select the website scope, and set:
+The setup command configures the local loyalty mock and creates these storefront data:
 
-| Setting | Local value |
-| --- | --- |
-| Enable | Yes |
-| Loyalty Service Base URL | `http://loyalty-mock:8080` |
-| Loyalty Service Token | Any non-empty local value |
-| Request Timeout | `10` |
-| Cache TTL | `300` |
-| Loyalty Currency | `UAH` |
-| Thresholds | `4000 → 3%`, `8000 → 5%` |
+- customer: `reviewer@example.test` / `Review123!`
+- `prostor-demo-eligible`: `1000 UAH`, included in the discount
+- `prostor-demo-excluded`: `500 UAH`, `promo_excluded = Yes`
+- local loyalty configuration: enabled, `UAH`, `4000 → 3%`, `8000 → 5%`
+
+The command is safe to run again. It updates the configuration, products, and stock without adding duplicates. An existing demo customer's password is not changed.
+
+## Loyalty mock
 
 The local mock accepts `normal`, `below-threshold`, `http-500`, and `timeout` modes. Change `LOYALTY_MOCK_MODE` in `.env`, recreate the mock, and clean the loyalty cache:
 
@@ -45,10 +45,10 @@ docker compose --env-file .env -f compose.yaml exec app bin/magento cache:clean 
 
 ## Check the discount
 
-Create two simple products and add both to the cart of an authenticated customer:
+Sign in as the demo customer, then open these product pages and add both items to the cart:
 
-- eligible product: price `1000 UAH`, `promo_excluded = No`
-- excluded product: price `500 UAH`, `promo_excluded = Yes`
+- `/prostor-demo-eligible.html`
+- `/prostor-demo-excluded.html`
 
 With `normal` mode, the `8000 → 5%` threshold applies. The cart shows `Prostor Cumulative: -50.00 UAH`; the excluded product is not discounted. With `below-threshold`, no cumulative discount is shown. A `500` response or timeout also leaves the cart usable without the discount and writes a warning to `src/var/log/prostor_cumdiscount.log`.
 

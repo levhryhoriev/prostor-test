@@ -21,4 +21,11 @@
             <argument name="logger" xsi:type="object">Prostor\CumDiscount\Logger\LoyaltyLogger</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="prostor_cumdiscount_seed_demo" xsi:type="object">Prostor\CumDiscount\Console\Command\SeedDemoDataCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
