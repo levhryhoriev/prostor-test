@@ -12,7 +12,9 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager as CacheManager;
+use Magento\Framework\App\State;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -48,7 +50,8 @@ class SeedDemoDataCommand extends Command
         private readonly StoreManagerInterface $storeManager,
         private readonly WriterInterface $configWriter,
         private readonly EncryptorInterface $encryptor,
-        private readonly CacheManager $cacheManager
+        private readonly CacheManager $cacheManager,
+        private readonly State $appState
     ) {
         parent::__construct();
     }
@@ -61,6 +64,8 @@ class SeedDemoDataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->appState->setAreaCode(Area::AREA_GLOBAL);
+
         $website = $this->storeManager->getWebsite();
         $websiteId = (int) $website->getId();
 
