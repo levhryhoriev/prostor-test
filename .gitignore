@@ -1,0 +1,16 @@
+.env
+.runtime.env
+.composer/
+__pycache__/
+/src/auth.json
+/src/*
+!/src/composer.json
+!/src/composer.lock
+!/src/auth.json.sample
+!/src/app/
+/src/app/*
+!/src/app/code/
+/src/app/code/*
+!/src/app/code/Prostor/
+!/src/app/code/Prostor/CumDiscount/
+!/src/app/code/Prostor/CumDiscount/**
